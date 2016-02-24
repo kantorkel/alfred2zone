@@ -26,6 +26,8 @@ print("""$TTL 600  ; 10 minutes
 
 HostnameRegex = re.compile(ValidHostnameRegex)
 
+already_added = []
+
 for e in data:
   node = e["nodeinfo"]
   try:
@@ -41,7 +43,10 @@ for e in data:
         address = a
         break
 
-    if address:
-      print("%s\tAAAA\t%s" % (hostname, address))
+    hostname_normalized = hostname.lower()
+
+    if address and hostname_normalized not in already_added:
+      print("%s\tAAAA\t%s" % (hostname_normalized, address))
+      already_added.append(hostname_normalized)
   except:
     pass
