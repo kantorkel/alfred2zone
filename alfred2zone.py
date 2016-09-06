@@ -8,7 +8,7 @@ from time import time
 
 def extract_hostname(json):
     try:
-        return json['nodeinfo']['hostname']
+        return json['nodeinfo']['hostname'].lower()
     except KeyError:
         return 0
 
