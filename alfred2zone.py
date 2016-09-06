@@ -6,10 +6,17 @@ import re
 from ipaddress import *
 from time import time
 
+def extract_hostname(json):
+    try:
+        return json['nodeinfo']['hostname']
+    except KeyError:
+        return 0
+
 ValidHostnameRegex = "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"
 prefix = IPv6Network('2a03:2267::/64')
 
-data = json.load(sys.stdin)["nodes"].values()
+data = list(json.load(sys.stdin)["nodes"].values())
+data.sort(key=extract_hostname)
 
 print("""$TTL 600  ; 10 minutes
 @     IN SOA  srv01.hamburg.freifunk.net. hostmaster.hamburg.freifunk.net. (
